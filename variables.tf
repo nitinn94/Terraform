@@ -9,11 +9,11 @@ variable "instance_type" {
 variable "ami_id" {
   description = "The AMI ID to use for the instance"
   type        = string
-  default     = "ami-0c55b159cbfafe1f0"  # Amazon Linux 2 AMI ID (us-west-2 region)
+  default     = "ami-0e2c8caa4b6378d8c"  # AMI ID (us-east-1 region)
 }
 
 variable "key_name" {
   description = "The SSH key name to access the EC2 instance"
   type        = string
-  default     = "my-key-pair"  # Replace with your actual key name
+  default     = "nitin"  # Replace with your actual key name
 }
