@@ -23,7 +23,7 @@ resource "aws_instance" "my_instance" {
               # Pull the Nginx Docker image
               docker pull nginx:latest
               # Run the Nginx container
-              docker run -d -p 3000:3000 --name my-nginx-app nginx:latest
+              docker run -d -p 80:3000 --name my-nginx-app nginx:latest
               EOF
 
   tags = {
