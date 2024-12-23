@@ -18,6 +18,8 @@ resource "aws_instance" "my_instance" {
               # Start Docker service
               systemctl start docker
               systemctl enable docker
+              # Add the current user (ubuntu) to the docker group
+              usermod -aG docker ubuntu
               # Pull the Nginx Docker image
               docker pull nginx:latest
               # Run the Nginx container
