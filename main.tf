@@ -1,13 +1,15 @@
+# main.tf
+
 provider "aws" {
-  region = var.region  # Use region from variables
+  region = "us-west-2"  # Choose your AWS region
 }
 
 resource "aws_instance" "my_instance" {
-  ami             = var.ami_id  # Use AMI ID from variables
-  instance_type   = var.instance_type  # Use instance type from variables
-  key_name        = var.key_name  # Use the key name from variables
+  ami             = var.ami_id          # Use the variable for AMI ID
+  instance_type   = var.instance_type   # Use the variable for Instance Type
+  key_name        = var.key_name        # Use the variable for SSH Key Pair
   security_groups = [aws_security_group.sg.name]
-
+  
   # User data to install Docker and deploy application
   user_data = <<-EOF
               #!/bin/bash
@@ -16,8 +18,8 @@ resource "aws_instance" "my_instance" {
               service docker start
               usermod -a -G docker ec2-user
               systemctl enable docker
-              docker pull ${var.docker_image}
-              docker run -d -p ${var.docker_port}:${var.docker_port} --name ${var.docker_container_name} ${var.docker_image}
+              docker pull nginx:latest
+              docker run -d -p 80:80 --name my-app nginx:latest
               EOF
 
   tags = {
@@ -30,17 +32,17 @@ resource "aws_security_group" "sg" {
   description = "Allow inbound HTTP traffic"
 
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 3000
+    to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]  # Allows traffic from anywhere
   }
 
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = "-1"  # Allows all outbound traffic
+    cidr_blocks = ["0.0.0.0/0"]  # Allows traffic to anywhere
   }
 }
 
