@@ -6,7 +6,7 @@ variable "instance_type" {
   default     = "t2.micro"  # Default value (if not provided)
 }
 
-variable "ami_id" {
+variable "ami" {
   description = "The AMI ID to use for the instance"
   type        = string
   default     = "ami-0e2c8caa4b6378d8c"  # AMI ID (us-east-1 region)
