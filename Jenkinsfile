@@ -4,7 +4,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Checkout the Terraform code from Git repository
-                git branch: 'main', url: 'https://github.com/your-repo/terraform-configs.git'  // Replace with your repository
+                git branch: 'main', url: 'https://github.com/nitinn94/Terraform.git'  // Replace with your repository
             }
         }
         stage('Initialize Terraform') {
