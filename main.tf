@@ -1,29 +1,31 @@
-# main.tf
-
 provider "aws" {
-  region = "us-west-2"  # Choose your AWS region
+  region = "us-east-1"  # Choose your AWS region
 }
 
 resource "aws_instance" "my_instance" {
-  ami             = var.ami_id          # Use the variable for AMI ID
-  instance_type   = var.instance_type   # Use the variable for Instance Type
-  key_name        = var.key_name        # Use the variable for SSH Key Pair
+  ami             = var.ami             # Reference the variable for AMI
+  instance_type   = var.instance_type   # Reference the variable for instance type
+  key_name        = var.key_name        # Reference the variable for key name
   security_groups = [aws_security_group.sg.name]
-  
-  # User data to install Docker and deploy application
+
+  # User data to install Docker, start Docker service, and deploy nginx container
   user_data = <<-EOF
               #!/bin/bash
-              yum update -y
-              amazon-linux-extras install docker -y
-              service docker start
-              usermod -a -G docker ec2-user
+              # Update Ubuntu package list
+              apt-get update -y
+              # Install Docker
+              apt-get install docker.io -y
+              # Start Docker service
+              systemctl start docker
               systemctl enable docker
+              # Pull the Nginx Docker image
               docker pull nginx:latest
-              docker run -d -p 80:80 --name my-app nginx:latest
+              # Run the Nginx container
+              docker run -d -p 3000:3000 --name my-nginx-app nginx:latest
               EOF
 
   tags = {
-    Name = "MyDockerAppInstance"
+    Name = "MyUbuntuDockerAppInstance"
   }
 }
 
